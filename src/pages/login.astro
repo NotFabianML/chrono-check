@@ -1,0 +1,85 @@
+---
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import MainLayout from '@/layouts/main.astro';
+
+const content = {
+  title: "Login de Acceso"
+};
+---
+
+<MainLayout content={content}>
+  <main class="flex items-center justify-center min-h-screen bg-slate-100">
+    <Card className="w-full max-w-sm">
+      <CardHeader>
+        <CardTitle className="text-2xl text-center">Control de Corredores</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <form id="login-form">
+          <div id="error-message" class="text-red-500 text-sm mb-4 text-center hidden"></div>
+          <div class="grid gap-4">
+            <div class="grid gap-2">
+              <Label htmlFor="username">Usuario</Label>
+              <Input id="username" name="username" type="text" required />
+            </div>
+            <div class="grid gap-2">
+              <Label htmlFor="password">Contraseña</Label>
+              <Input id="password" name="password" type="password" required />
+            </div>
+            <Button type="submit" className="w-full">Ingresar</Button>
+          </div>
+        </form>
+      </CardContent>
+    </Card>
+  </main>
+</MainLayout>
+
+<script>
+  // Espera a que todo el HTML de la página esté cargado antes de ejecutar el código
+  document.addEventListener('DOMContentLoaded', () => {
+
+    const loginForm = document.getElementById('login-form');
+
+    loginForm?.addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      const form = event.target as HTMLFormElement;
+      const formData = new FormData(form);
+      const data = Object.fromEntries(formData.entries());
+
+      console.log('Enviando los siguientes datos al servidor:', data);
+
+      const errorMessageElement = document.getElementById('error-message');
+      if (errorMessageElement) errorMessageElement.classList.add('hidden');
+      
+      try {
+        const response = await fetch('/api/auth', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+          window.location.href = '/';
+        } else {
+          if (errorMessageElement) {
+            errorMessageElement.textContent = result.message || 'Credenciales incorrectas.';
+            errorMessageElement.classList.remove('hidden');
+          }
+        }
+      } catch (error) {
+         if (errorMessageElement) {
+            errorMessageElement.textContent = 'Error de red. Intente de nuevo.';
+            errorMessageElement.classList.remove('hidden');
+          }
+      }
+    });
+
+  });
+</script>

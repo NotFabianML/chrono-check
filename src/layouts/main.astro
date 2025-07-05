@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import { Toaster } from '@/components/ui/sonner';
 const { content } = Astro.props;
 ---
 
@@ -12,5 +13,6 @@ const { content } = Astro.props;
 	</head>
 	<body>
 		<slot />
+    <Toaster richColors client:load/>
 	</body>
 </html>
