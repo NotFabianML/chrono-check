@@ -42,6 +42,7 @@ export function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const [confirmingCorredor, setConfirmingCorredor] = useState<Corredor | null>(null);
 
   // --- EFECTO PARA CARGAR DATOS ---
   useEffect(() => {
@@ -204,7 +205,7 @@ export function Dashboard() {
           <TableHeader>
             <TableRow>
               <TableHead className="text-center">Verificado Fed.</TableHead>
-              <TableHead>Cédula</TableHead>
+              <TableHead>ID</TableHead>
               <TableHead>Nombre Completo</TableHead>
               <TableHead>Tipo Licencia</TableHead>
               <TableHead>Categoría</TableHead>
@@ -216,6 +217,8 @@ export function Dashboard() {
                 key={corredor.id}
                 corredor={corredor}
                 onUpdate={handleUpdateCorredor}
+                confirmingCorredor={confirmingCorredor}
+                onConfirmVerification={setConfirmingCorredor}
               />
             ))}
           </TableBody>
