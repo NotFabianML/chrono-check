@@ -1,7 +1,7 @@
 import { defineMiddleware } from "astro:middleware";
 
 // Rutas que no requieren autenticación
-const publicRoutes = ["/login", "/"];
+const publicRoutes = ["/login", "/", "/no-check"];
 
 export const onRequest = defineMiddleware(async (context, next) => {
   const isPublicRoute = publicRoutes.some(p => context.url.pathname.startsWith(p));

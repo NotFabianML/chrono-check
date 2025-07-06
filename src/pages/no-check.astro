@@ -1,0 +1,29 @@
+---
+import fs from 'fs';
+import path from 'path';
+import Papa from 'papaparse';
+import MainLayout from '@/layouts/main.astro';
+import { NoCheckDashboard } from '@/components/NoCheckDashboard.tsx';
+
+// Leer y parsear el archivo CSV en el servidor
+const csvPath = path.join(process.cwd(), 'public', 'no-check-data.csv');
+const csvFile = fs.readFileSync(csvPath, 'utf8');
+const parsedData = Papa.parse(csvFile, {
+  header: true, // Trata la primera fila como encabezado
+  skipEmptyLines: true,
+});
+
+// Import the interface or define the type here
+import type { NoCheckCorredor } from '@/components/NoCheckDashboard';
+const corredores = parsedData.data as NoCheckCorredor[];
+
+corredores.sort((a, b) => Number(a.dorsal) - Number(b.dorsal));
+
+const content = {
+  title: "Lista de Dorsales"
+};
+---
+
+<MainLayout content={content}>
+  <NoCheckDashboard corredores={corredores} client:load />
+</MainLayout>
