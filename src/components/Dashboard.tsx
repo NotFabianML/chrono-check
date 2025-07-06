@@ -198,6 +198,9 @@ export function Dashboard() {
         <Button onClick={handleDownloadCSV}>
           Descargar CSV
         </Button>
+        <Button asChild className='bg-green-600 hover:bg-green-700'>
+          <a href="/no-check" className="text-white">Ver lista No-Check</a>
+        </Button>
       </div>
 
       <div className="rounded-md border">
